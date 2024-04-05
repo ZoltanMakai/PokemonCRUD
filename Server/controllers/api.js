@@ -1,10 +1,10 @@
 const Pokemon = require("../models/pokemons");
 
-module.exports =  API {
+module.exports = class API {
   static async fetchAllPokemon(req, res) {
     try {
-      const pokemon = await Pokemon.find();
-      res.status(200).json(pokemon);
+      const pokemons = await Pokemon.find();
+      res.status(200).json(pokemons);
     } catch (err) {
       res.status(404).json({ message: err.message });
     }

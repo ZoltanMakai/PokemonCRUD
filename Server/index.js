@@ -14,12 +14,7 @@ app.use(express.static("uploads"));
 
 //database
 mongoose
-  .connect(process.env.DB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false, // Corrected option
-    useCreateIndex: true,
-  })
+  .connect(process.env.DB_URI)
   .then(() => console.log("Connected to database!"))
   .catch((err) => console.error(err));
 
