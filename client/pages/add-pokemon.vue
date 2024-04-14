@@ -1,3 +1,5 @@
 <template>
-  <h1>Add POkemon</h1>
+  <div class="container mx-auto p-6">
+    <div>Add Pokemon</div>
+  </div>
 </template>
