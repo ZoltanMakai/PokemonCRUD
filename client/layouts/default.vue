@@ -87,4 +87,5 @@ const items = ref([
     link: "/about",
   },
 ]);
+provide("drawer", { drawerOpen });
 </script>
