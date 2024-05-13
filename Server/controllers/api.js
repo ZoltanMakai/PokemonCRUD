@@ -1,17 +1,17 @@
 const Pokemon = require("../models/pokemons");
 const fs = require("fs");
 
-module.exports = class API {
-  static async fetchAllPokemon(req, res) {
+const API = {
+  fetchAllPokemon: async (req, res) => {
     try {
       const pokemons = await Pokemon.find();
       res.status(200).json(pokemons);
     } catch (err) {
       res.status(404).json({ message: err.message });
     }
-  }
+  },
 
-  static async fetchPokemonbyID(req, res) {
+  fetchPokemonbyID: async (req, res) => {
     const id = req.params.id;
     try {
       const pokemon = await Pokemon.findById(id);
@@ -19,9 +19,9 @@ module.exports = class API {
     } catch (err) {
       res.status(404).json({ error: err.message });
     }
-  }
+  },
 
-  static async createPokemon(req, res) {
+  createPokemon: async (req, res) => {
     const pokemon = req.body;
     const imagename = req.file.filename;
     pokemon.image = imagename;
@@ -31,9 +31,9 @@ module.exports = class API {
     } catch (err) {
       res.status(400).json({ message: err.message });
     }
-  }
+  },
 
-  static async updatePokemon(req, res) {
+  updatePokemon: async (req, res) => {
     const id = req.params.id;
     let new_image = "";
     if (req.file) {
@@ -41,7 +41,7 @@ module.exports = class API {
       try {
         fs.unlinkSync("./uploads/" + req.body.old_image);
       } catch (error) {
-        console.log(err);
+        console.log(error);
       }
     } else {
       new_image = req.body.old_image;
@@ -54,9 +54,9 @@ module.exports = class API {
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
-  }
+  },
 
-  static async deletePokemon(req, res) {
+  deletePokemon: async (req, res) => {
     const id = req.params.id;
     try {
       const result = await Pokemon.findByIdAndDelete(id);
@@ -71,5 +71,7 @@ module.exports = class API {
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
-  }
+  },
 };
+
+module.exports = API;

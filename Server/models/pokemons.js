@@ -5,7 +5,7 @@ const pokemonSchema = mongoose.Schema({
   type: String,
   hp: Number,
   attack: Number,
-  defence: Number,
+  defense: Number,
   speed: Number,
   image: String,
   created: {
