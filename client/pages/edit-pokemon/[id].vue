@@ -1,7 +1,7 @@
 <template>
   <div :class="{ 'ml-48': drawerOpen }">
     <div class="max-w-md mx-auto mt-8">
-      <form ref="form" @submit.prevent="submitForm">
+      <form ref="form" @submit.prevent="editForm">
         <div class="mb-4">
           <label for="name" class="text-gray-700 font-bold mb-2">Name</label>
           <input
@@ -109,6 +109,11 @@
             accept="image/*"
             @change="handleImageUpload"
           />
+          <img
+            :src="`http://localhost:5000/${pokemon.image}`"
+            class="w-16"
+            alt="Pokemon Image"
+          />
           <div v-if="showErrorMessage && !pokemon.image" class="text-red-500">
             Please select an image
           </div>
@@ -118,7 +123,7 @@
             type="submit"
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
-            Create Pokémon
+            Update Pokémon
           </button>
         </div>
       </form>
@@ -127,11 +132,12 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import API from "../src/api";
 
 const { drawerOpen } = inject("drawer");
 const router = useRouter();
+const route = useRoute();
 
 const pokemon = ref({
   name: "",
@@ -151,7 +157,16 @@ const handleImageUpload = (event) => {
   }
 };
 
-const submitForm = async () => {
+onMounted(async () => {
+  try {
+    const response = await API.getPokemonById(route.params.id);
+    pokemon.value = response;
+  } catch (error) {
+    console.error("Error fetching Pokémon details:", error);
+  }
+});
+
+const editForm = async () => {
   showErrorMessage.value = true;
   if (
     !pokemon.value.name ||
@@ -178,7 +193,7 @@ const submitForm = async () => {
     formData.append("speed", pokemon.value.speed);
     formData.append("image", pokemon.value.image);
 
-    await API.addPokemon(formData);
+    await API.updatePokemonById(route.params.id, formData);
     router.push({ path: "/", query: { success: true } });
   } catch (error) {
     console.error("Error adding Pokémon:", error);

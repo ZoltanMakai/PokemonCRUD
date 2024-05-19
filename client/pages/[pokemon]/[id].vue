@@ -58,12 +58,15 @@
         </div>
       </div>
       <div class="flex justify-between px-6 py-6">
+        <nuxt-link :to="`/edit-pokemon/${pokemon._id}`">
+          <button
+            class="bg-blue-500 text-white px-4 py-2 rounded-md text-lg transform scale-130"
+          >
+            Edit
+          </button>
+        </nuxt-link>
         <button
-          class="bg-blue-500 text-white px-4 py-2 rounded-md text-lg transform scale-130"
-        >
-          Edit
-        </button>
-        <button
+          @click="deletePokemon(pokemon._id)"
           class="bg-red-500 text-white px-4 py-2 rounded-md text-lg transform scale-130"
         >
           Delete
@@ -80,6 +83,7 @@
 
 <script setup>
 const { drawerOpen } = inject("drawer");
+const router = useRouter();
 
 import API from "../src/api";
 
@@ -94,4 +98,13 @@ onMounted(async () => {
     console.error("Error fetching pokemon:", error);
   }
 });
+
+const deletePokemon = async (id) => {
+  try {
+    await API.deletePokemon(id);
+    router.push({ path: "/" });
+  } catch (error) {
+    console.error("Error deleting pokemon:", error);
+  }
+};
 </script>

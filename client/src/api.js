@@ -16,11 +16,11 @@ const API = {
     return res.data;
   },
   updatePokemonById: async (id, pokemon) => {
-    const res = await axios.patch(`${url}/${id}`, pokemon);
+    const res = await axios.patch(`${url}${id}`, pokemon);
     return res.data;
   },
   deletePokemon: async (id) => {
-    const res = await axios.delete(`${url}/${id}`);
+    const res = await axios.delete(`${url}${id}`);
     return res.data;
   },
 };
