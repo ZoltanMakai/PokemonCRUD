@@ -36,23 +36,40 @@ const API = {
   updatePokemon: async (req, res) => {
     const id = req.params.id;
     let new_image = "";
-    if (req.file) {
-      new_image = req.file.filename;
-      try {
-        fs.unlinkSync("./uploads/" + req.body.old_image);
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      new_image = req.body.old_image;
-    }
-    const newPokemon = req.body;
-    newPokemon.image = new_image;
+
     try {
-      await Pokemon.findByIdAndUpdate(id, newPokemon);
+      const existingPokemon = await Pokemon.findById(id);
+
+      if (!existingPokemon) {
+        return res.status(404).json({ message: "Pokemon not found" });
+      }
+
+      if (req.file) {
+        new_image = req.file.filename;
+
+        try {
+          if (existingPokemon.image) {
+            fs.unlinkSync("./uploads/" + existingPokemon.image);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        new_image = existingPokemon.image;
+      }
+
+      existingPokemon.name = req.body.name;
+      existingPokemon.type = req.body.type;
+      existingPokemon.hp = req.body.hp;
+      existingPokemon.attack = req.body.attack;
+      existingPokemon.defense = req.body.defense;
+      existingPokemon.speed = req.body.speed;
+      existingPokemon.image = new_image;
+
+      await existingPokemon.save();
       res.status(200).json({ message: "Pokemon updated successfully" });
     } catch (error) {
-      res.status(404).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     }
   },
 
