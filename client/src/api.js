@@ -7,20 +7,20 @@ const API = {
     const res = await axios.get(url);
     return res.data;
   },
-  getPokemonById: async (id) => {
-    const res = await axios.get(`${url}${id}`);
+  getPokemonBySlug: async (slug) => {
+    const res = await axios.get(`${url}${slug}`);
     return res.data;
   },
   addPokemon: async (pokemon) => {
     const res = await axios.post(url, pokemon);
     return res.data;
   },
-  updatePokemonById: async (id, pokemon) => {
-    const res = await axios.patch(`${url}${id}`, pokemon);
+  updatePokemonBySlug: async (slug, pokemon) => {
+    const res = await axios.patch(`${url}${slug}`, pokemon);
     return res.data;
   },
-  deletePokemon: async (id) => {
-    const res = await axios.delete(`${url}${id}`);
+  deletePokemon: async (slug) => {
+    const res = await axios.delete(`${url}${slug}`);
     return res.data;
   },
 };

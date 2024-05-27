@@ -17,9 +17,9 @@ let upload = multer({
 }).single("image");
 
 router.get("/", API.fetchAllPokemon);
-router.get("/:id", API.fetchPokemonbyID);
+router.get("/:slug", API.fetchPokemonBySlug);
 router.post("/", upload, API.createPokemon);
-router.patch("/:id", upload, API.updatePokemon);
-router.delete("/:id", API.deletePokemon);
+router.patch("/:slug", upload, API.updatePokemonBySlug);
+router.delete("/:slug", API.deletePokemonBySlug);
 
 module.exports = router;

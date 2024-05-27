@@ -58,7 +58,7 @@
         </div>
       </div>
       <div class="flex justify-between px-6 py-6">
-        <nuxt-link :to="`/edit-pokemon/${pokemon._id}`">
+        <nuxt-link :to="`/edit-pokemon/${pokemon.slug}`">
           <button
             class="bg-blue-500 text-white px-4 py-2 rounded-md text-lg transform scale-130"
           >
@@ -66,7 +66,7 @@
           </button>
         </nuxt-link>
         <button
-          @click="deletePokemon(pokemon._id)"
+          @click="deletePokemon(pokemon.slug)"
           class="bg-red-500 text-white px-4 py-2 rounded-md text-lg transform scale-130"
         >
           Delete
@@ -84,25 +84,28 @@
 <script setup>
 const { drawerOpen } = inject("drawer");
 const router = useRouter();
+const route = useRoute();
 
 import API from "../src/api";
 
 const pokemon = ref({});
-const route = useRoute();
 
 onMounted(async () => {
   try {
-    const response = await API.getPokemonById(route.params.id);
+    const response = await API.getPokemonBySlug(route.params.slug);
     pokemon.value = response;
   } catch (error) {
     console.error("Error fetching pokemon:", error);
   }
 });
 
-const deletePokemon = async (id) => {
+const deletePokemon = async (slug) => {
   try {
-    await API.deletePokemon(id);
-    router.push({ path: "/" });
+    await API.deletePokemon(slug);
+    router.push({
+      path: "/",
+      query: { message: "Pokemon deleted successfully!" },
+    });
   } catch (error) {
     console.error("Error deleting pokemon:", error);
   }

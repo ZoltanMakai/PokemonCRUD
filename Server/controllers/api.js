@@ -1,5 +1,6 @@
 const Pokemon = require("../models/pokemons");
 const fs = require("fs");
+const slugify = require("slugify");
 
 const API = {
   fetchAllPokemon: async (req, res) => {
@@ -11,10 +12,13 @@ const API = {
     }
   },
 
-  fetchPokemonbyID: async (req, res) => {
-    const id = req.params.id;
+  fetchPokemonBySlug: async (req, res) => {
+    const slug = req.params.slug;
     try {
-      const pokemon = await Pokemon.findById(id);
+      const pokemon = await Pokemon.findOne({ slug });
+      if (!pokemon) {
+        return res.status(404).json({ message: "Pokemon not found" });
+      }
       res.status(200).json(pokemon);
     } catch (err) {
       res.status(404).json({ error: err.message });
@@ -33,12 +37,12 @@ const API = {
     }
   },
 
-  updatePokemon: async (req, res) => {
-    const id = req.params.id;
+  updatePokemonBySlug: async (req, res) => {
+    const slug = req.params.slug;
     let new_image = "";
 
     try {
-      const existingPokemon = await Pokemon.findById(id);
+      const existingPokemon = await Pokemon.findOne({ slug });
 
       if (!existingPokemon) {
         return res.status(404).json({ message: "Pokemon not found" });
@@ -65,6 +69,7 @@ const API = {
       existingPokemon.defense = req.body.defense;
       existingPokemon.speed = req.body.speed;
       existingPokemon.image = new_image;
+      existingPokemon.slug = slugify(req.body.name, { lower: true });
 
       await existingPokemon.save();
       res.status(200).json({ message: "Pokemon updated successfully" });
@@ -73,10 +78,13 @@ const API = {
     }
   },
 
-  deletePokemon: async (req, res) => {
-    const id = req.params.id;
+  deletePokemonBySlug: async (req, res) => {
+    const slug = req.params.slug;
     try {
-      const result = await Pokemon.findByIdAndDelete(id);
+      const result = await Pokemon.findOneAndDelete({ slug });
+      if (!result) {
+        return res.status(404).json({ message: "Pokemon not found" });
+      }
       if (result.image != "") {
         try {
           fs.unlinkSync("./uploads/" + result.image);

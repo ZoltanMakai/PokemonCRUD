@@ -127,7 +127,6 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
 import API from "../src/api";
 
 const { drawerOpen } = inject("drawer");
@@ -179,7 +178,10 @@ const submitForm = async () => {
     formData.append("image", pokemon.value.image);
 
     await API.addPokemon(formData);
-    router.push({ path: "/", query: { success: true } });
+    router.push({
+      path: "/",
+      query: { message: "Pokemon created successfully!" },
+    });
   } catch (error) {
     console.error("Error adding Pokémon:", error);
   }

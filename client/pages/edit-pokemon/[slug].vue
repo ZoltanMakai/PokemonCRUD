@@ -132,7 +132,6 @@
 </template>
 
 <script setup>
-import { useRouter, useRoute } from "vue-router";
 import API from "../src/api";
 
 const { drawerOpen } = inject("drawer");
@@ -159,7 +158,7 @@ const handleImageUpload = (event) => {
 
 onMounted(async () => {
   try {
-    const response = await API.getPokemonById(route.params.id);
+    const response = await API.getPokemonBySlug(route.params.slug);
     pokemon.value = response;
   } catch (error) {
     console.error("Error fetching Pokémon details:", error);
@@ -192,11 +191,15 @@ const editForm = async () => {
     formData.append("defense", pokemon.value.defense);
     formData.append("speed", pokemon.value.speed);
     formData.append("image", pokemon.value.image);
+    formData.append("slug", pokemon.value.image);
 
-    await API.updatePokemonById(route.params.id, formData);
-    router.push({ path: "/", query: { success: true } });
+    await API.updatePokemonBySlug(route.params.slug, formData);
+    router.push({
+      path: "/",
+      query: { message: "Pokemon edited successfully!" },
+    });
   } catch (error) {
-    console.error("Error adding Pokémon:", error);
+    console.error("Error editing Pokémon:", error);
   }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <nuxt-link :to="`/${pokemon.name}/${pokemon._id}`">
+  <nuxt-link :to="`/${pokemon.slug}`">
     <div
       class="bg-gray-300 border border-gray-400 rounded-lg overflow-hidden shadow-md w-64"
     >
