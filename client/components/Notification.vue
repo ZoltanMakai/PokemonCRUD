@@ -9,25 +9,12 @@
 </template>
 
 <script setup>
+const { visible, closeNotification } = useNotification();
+
 const props = defineProps({
   message: {
     type: String,
     required: true,
   },
-});
-
-const emit = defineEmits(["close"]);
-
-const visible = ref(true);
-
-const closeNotification = () => {
-  visible.value = false;
-  emit("close");
-};
-
-onMounted(() => {
-  setTimeout(() => {
-    closeNotification();
-  }, 10000);
 });
 </script>

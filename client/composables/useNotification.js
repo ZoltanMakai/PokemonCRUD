@@ -1,20 +1,23 @@
-const notificationMessage = ref(null);
-
 export function useNotification() {
-  const setNotification = (message) => {
+  const notificationMessage = useState("notificationMessage", () => null);
+  const visible = useState("notificationVisible", () => true);
+
+  const notify = (message) => {
     notificationMessage.value = message;
+    visible.value = true;
     setTimeout(() => {
-      notificationMessage.value = null;
-    }, 10000);
+      visible.value = false;
+    }, 5000);
   };
 
-  const clearNotification = () => {
-    notificationMessage.value = null;
+  const closeNotification = () => {
+    visible.value = false;
   };
 
   return {
     notificationMessage,
-    setNotification,
-    clearNotification,
+    visible,
+    notify,
+    closeNotification,
   };
 }

@@ -1,11 +1,5 @@
 <template>
   <div>
-    <Notification
-      v-if="notificationMessage"
-      :message="notificationMessage"
-      @close="clearNotification"
-    />
-
     <div
       :class="[
         drawerOpen ? 'ml-48' : '',
@@ -26,8 +20,7 @@ import API from "../src/api";
 const { drawerOpen } = inject("drawer");
 
 const pokemons = ref([]);
-const { notificationMessage, setNotification, clearNotification } =
-  useNotification();
+const { notify } = useNotification();
 const router = useRouter();
 const route = useRoute();
 
@@ -37,8 +30,7 @@ onMounted(async () => {
 
     const message = route.query.message;
     if (message) {
-      setNotification(message);
-      router.replace({ path: route.path, query: {} });
+      notify(message);
     }
   } catch (error) {
     console.error("Error fetching pokemons:", error);

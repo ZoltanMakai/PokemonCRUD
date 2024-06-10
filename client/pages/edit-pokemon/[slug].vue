@@ -135,6 +135,8 @@
 import API from "../src/api";
 
 const { drawerOpen } = inject("drawer");
+const { notify } = useNotification();
+
 const router = useRouter();
 const route = useRoute();
 
@@ -191,13 +193,10 @@ const editForm = async () => {
     formData.append("defense", pokemon.value.defense);
     formData.append("speed", pokemon.value.speed);
     formData.append("image", pokemon.value.image);
-    formData.append("slug", pokemon.value.image);
 
     await API.updatePokemonBySlug(route.params.slug, formData);
-    router.push({
-      path: "/",
-      query: { message: "Pokemon edited successfully!" },
-    });
+    notify("Pokemon edited successfully!");
+    router.push({ path: "/" });
   } catch (error) {
     console.error("Error editing Pokémon:", error);
   }
