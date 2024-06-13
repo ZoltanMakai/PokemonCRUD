@@ -20,18 +20,10 @@ import API from "../src/api";
 const { drawerOpen } = inject("drawer");
 
 const pokemons = ref([]);
-const { notify } = useNotification();
-const router = useRouter();
-const route = useRoute();
 
 onMounted(async () => {
   try {
     pokemons.value = await API.getAllPokemons();
-
-    const message = route.query.message;
-    if (message) {
-      notify(message);
-    }
   } catch (error) {
     console.error("Error fetching pokemons:", error);
   }

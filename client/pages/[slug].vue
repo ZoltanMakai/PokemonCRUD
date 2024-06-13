@@ -85,6 +85,7 @@
 const { drawerOpen } = inject("drawer");
 const router = useRouter();
 const route = useRoute();
+const { notify } = useNotification();
 
 import API from "../src/api";
 
@@ -102,10 +103,8 @@ onMounted(async () => {
 const deletePokemon = async (slug) => {
   try {
     await API.deletePokemon(slug);
-    router.push({
-      path: "/",
-      query: { message: "Pokemon deleted successfully!" },
-    });
+    notify("Pokemon deleted successfully!");
+    router.push({ path: "/" });
   } catch (error) {
     console.error("Error deleting pokemon:", error);
   }

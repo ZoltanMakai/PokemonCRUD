@@ -131,6 +131,7 @@ import API from "../src/api";
 
 const { drawerOpen } = inject("drawer");
 const router = useRouter();
+const { notify } = useNotification();
 
 const pokemon = ref({
   name: "",
@@ -178,10 +179,8 @@ const submitForm = async () => {
     formData.append("image", pokemon.value.image);
 
     await API.addPokemon(formData);
-    router.push({
-      path: "/",
-      query: { message: "Pokemon created successfully!" },
-    });
+    notify("Pokemon created  successfully!");
+    router.push({ path: "/" });
   } catch (error) {
     console.error("Error adding Pokémon:", error);
   }
